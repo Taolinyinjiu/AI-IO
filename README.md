@@ -96,7 +96,7 @@ python src/main_learning.py \
     --show_plots
 ```
 
-**Note:** Pre-trained weights are available [here](https://github.com/SJTU-ViSYS-team/AI-IO/releases/download/dataset-v1.0/checkpoint_open.pt)
+**Note:** Pre-trained weights are available [here](https://github.com/SJTU-ViSYS-team/AI-IO/releases/download/v1.0/checkpoint_open.pt)
 
 #### 3b. Run Extended Kalman Filter
 

@@ -1,3 +1,11 @@
+"""
+filter 结果绘图工具函数。
+
+这些函数只负责把已经对齐好的估计值/真值数组画成 matplotlib 图，不负责读取文件、
+插值或计算误差。顶层脚本 `plot_filter_output.py` 会调用这些工具生成 position、
+trajectory、bias、velocity、attitude 等图。
+"""
+
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 
@@ -7,6 +15,12 @@ def xyPlot(title, labelx, labely,
     vec2 = None, label2 = None, 
     vec3 = None, label3 = None,
     vec4 = None, label4 = None):
+    """
+    绘制二维曲线。
+
+    `vec*` 约定为两列数组: 第 0 列为横轴，第 1 列为纵轴。
+    可选传入最多四条曲线，常用于 XY/XZ/YZ 轨迹对比。
+    """
     plt.plot(vec1[:, 0], vec1[:, 1], label=label1)
     if vec2 is not None:
         plt.plot(vec2[:, 0], vec2[:, 1], label=label2)
@@ -26,6 +40,11 @@ def xyztPlot(title,
     vec2 = None, label2 = None,
     vec3 = None, label3 = None,
     vec4 = None, label4 = None):
+    """
+    绘制 x/y/z 随时间变化的三行子图。
+
+    `vec*` 约定为 `[t, x, y, z]`，常用于位置或速度的时序对比。
+    """
     plt.subplot(311)
     plt.plot(vec1[:,0], vec1[:,1], label=label1)
     if vec2 is not None:
@@ -68,6 +87,14 @@ def xyztPlot(title,
 
 
 def plotBiases(ts, bg, ba):
+    """
+    绘制陀螺仪 bias 和加速度计 bias。
+
+    输入:
+    - `ts`: 时间戳。
+    - `bg`: `[N, 3]` gyro bias。
+    - `ba`: `[N, 3]` accel bias。
+    """
     fig = plt.figure('IMU biases')
     plt.tight_layout(pad=1.08, h_pad=None, w_pad=None, rect=None)
     plt.subplot(211)
@@ -92,6 +119,7 @@ def plotBiases(ts, bg, ba):
 
 
 def make_position_plots(traj, gt):
+    """生成 XY/XZ/YZ 三个二维视角的轨迹对比图。"""
     # 2d positions
     fig = plt.figure('2D views')
     gs = gridspec.GridSpec(2, 2)
@@ -114,6 +142,7 @@ def make_position_plots(traj, gt):
 
 
 def make_velocity_plots(est_vel, gt_vel):
+    """生成 x/y/z 三轴速度估计与真值对比图。"""
     plt.figure("Velocity")
     
     plt.subplot(311)
@@ -143,6 +172,7 @@ def make_velocity_plots(est_vel, gt_vel):
 
 
 def make_ori_euler_plots(est_xyz, gt_xyz):
+    """生成 yaw/pitch/roll 欧拉角估计与真值对比图。"""
     plt.figure("Orientation [Euler angles]")
 
     plt.subplot(311)
@@ -169,4 +199,3 @@ def make_ori_euler_plots(est_xyz, gt_xyz):
     plt.ylabel('roll(deg)')
     plt.legend()
     plt.grid()
-
